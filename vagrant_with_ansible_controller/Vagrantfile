@@ -1,0 +1,35 @@
+Vagrant.configure("2") do |config|
+   config.vm.define "ansible" do |ans|
+       ans.vm.box = "ubuntu/xenial64"
+       ans.vm.network "private_network", ip: "10.0.1.10"
+
+       ans.vm.provision :shell do |shell|
+           shell.path = "install_ansible.sh"
+       end
+       ans.vm.provision :shell do |shell|
+           shell.path = "config_ansible.sh"
+       end
+   end
+
+ # Configure first web machine
+  config.vm.define "web1" do |web1|
+      web1.vm.box = "ubuntu/xenial64"
+      web1.vm.network "private_network", ip: "10.0.1.11"
+
+       web1.vm.provision :shell do |shell|
+           shell.path = "config_keys.sh"
+       end
+ end
+ # Configure second web machine
+  config.vm.define "web2" do |web2|
+      web2.vm.box = "ubuntu/xenial64"
+      web2.vm.network "private_network", ip: "10.0.1.12"
+
+       web2.vm.provision :shell do |shell|
+           shell.path = "config_keys.sh"
+       end
+  end  
+ 
+  #Ansible Machine
+
+end

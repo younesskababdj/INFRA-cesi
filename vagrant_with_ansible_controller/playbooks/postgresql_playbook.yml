@@ -1,0 +1,24 @@
+---
+- name: Install PostgreSQL
+  hosts: web1.joystopper.infra
+  become: true
+
+  tasks:
+    - name: Update apt cache (for Debian/Ubuntu systems)
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+
+    - name: Install PostgreSQL and psycopg2 (Python adapter)
+      package:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - python3-psycopg2
+      when: ansible_os_family == 'Debian'
+
+    - name: Start PostgreSQL service and enable it on boot
+      systemd:
+        name: postgresql
+        state: started
+        enabled: yes

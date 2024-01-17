@@ -1,0 +1,12 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+ Vagrant.configure("2") do |config|
+     config.vm.box = "ubuntu/focal64"
+     config.vm.network "forwarded_port", guest: 80, host: 8081
+     config.vm.provision "docker" do |dock|
+        dock.post_install_provision "shell", inline:"touch /vagrant/index.html && echo '<h1>Hello CESI!</h1>' > /vagrant/index.html"
+        dock.run "nginx",
+            args: "-p 80:80 -v '/vagrant:/usr/share/nginx/html'"
+     end
+ end

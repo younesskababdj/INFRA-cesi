@@ -1,0 +1,20 @@
+---
+- name: Remove PostgreSQL
+  hosts: web1.joystopper.infra
+  become: true
+
+  tasks:
+    - name: Stop PostgreSQL service and disable it on boot
+      systemd:
+        name: postgresql
+        state: stopped
+        enabled: no
+
+    - name: Remove PostgreSQL packages
+      package:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - python3-psycopg2
+        state: absent
+      when: ansible_os_family == 'Debian'
